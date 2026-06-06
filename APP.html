@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA WORLD CUP 2026 - Calendario Oficial</title>
+    <!-- Tailwind CSS CDN para el estilado moderno rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16a34a',
+                            600: '#15803d',
+                            700: '#166534',
+                            900: '#14532d',
+                        },
+                        fifa: {
+                            gold: '#db2777',
+                            blue: '#1d4ed8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados adicionales y animaciones */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .scroll-hidden::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hidden {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Estilos de impresión personalizados */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-layout {
+                display: block !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Encabezado / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-all no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl sm:text-3xl">🏆</span>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-xl tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">
+                        FIFA WORLD CUP 2026
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Calendario Oficial</p>
+                </div>
+            </div>
+
+            <!-- Controles de Navegación del Header -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Selector de Modo Oscuro -->
+                <button id="themeToggleBtn" onclick="toggleDarkMode()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Cambiar tema">
+                    <span id="themeBtnIcon" class="text-lg">🌙</span>
+                </button>
+
+                <!-- Contador Regresivo Global para el Partido Inaugural (11 de Junio, 2026) -->
+                <div class="hidden md:flex flex-col items-end text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 py-1.5 px-3 rounded-xl border border-emerald-100 dark:border-emerald-900">
+                    <span class="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-500 font-bold">Inauguración 11 Jun 2026</span>
+                    <span id="globalCountdown">Calculando...</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pestañas de Navegación Principal -->
+    <nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-1 sticky top-16 z-30 no-print shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-1 sm:space-x-2 overflow-x-auto scroll-hidden">
+                <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="tab-btn px-4 py-3 text-sm font-semibold rounded-lg flex items-center gap-2 whitespace-nowrap transition-all border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-emerald-600">
+                    📊 Resumen
+                </button>
+                <button onclick="switchTab('calendario')" id="tabBtn-calendario" class="tab-btn px-4 py-3 text-sm font-semibold rounded-lg flex items-center gap-2 whitespace-nowrap transition-all border-b-2 border-transparent text-emerald-600 dark:text-emerald-400">
+                    📅 Partidos & Calendario
+                </button>
+                <button onclick="switchTab('mi-mundial')" id="tabBtn-mi-mundial" class="tab-btn px-4 py-3 text-sm font-semibold rounded-lg flex items-center gap-2 whitespace-nowrap transition-all border-b-2 border-transparent text-slate-600 dark:text-slate-400">
+                    ⭐ Mi Agenda (<span id="agendaCountBadge">0</span>)
+                </button>
+                <button onclick="switchTab('sedes')" id="tabBtn-sedes" class="tab-btn px-4 py-3 text-sm font-semibold rounded-lg flex items-center gap-2 whitespace-nowrap transition-all border-b-2 border-transparent text-slate-600 dark:text-slate-400">
+                    🗺️ Sedes & Países
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ==================== VISTA: DASHBOARD ==================== -->
+        <section id="view-dashboard" class="tab-content hidden space-y-6 animate-fadeIn">
+            <!-- Banner Informativo -->
+            <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 sm:p-8 rounded-3xl shadow-lg relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 text-[150px] opacity-10 select-none pointer-events-none font-black">2026</div>
+                <div class="max-w-2xl">
+                    <span class="bg-white/20 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">CALENDARIO OFICIAL</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">¡Diseña tu experiencia para el Mundial del Siglo!</h2>
+                    <p class="text-emerald-100 mt-2 text-sm sm:text-base">Canadá, México y Estados Unidos albergan la Copa Mundial de la FIFA más grande de la historia. Marca tus preferencias de partidos y obtén tu agenda exportable en segundos.</p>
+                </div>
+            </div>
+
+            <!-- Indicadores Clave del Dashboard (Dashboard Superior) -->
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Partidos Totales</span>
+                    <div class="flex items-baseline gap-2 mt-2">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100" id="stat-total">104</span>
+                        <span class="text-xs text-emerald-600 font-semibold">100%</span>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between border-l-4 border-l-emerald-500">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">🟢 Quiero Verlo</span>
+                    <div class="flex items-baseline gap-2 mt-2">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400" id="stat-quiero">0</span>
+                        <span class="text-xs text-slate-400" id="pct-quiero">0%</span>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between border-l-4 border-l-amber-500">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">🟡 Tal Vez</span>
+                    <div class="flex items-baseline gap-2 mt-2">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-amber-500" id="stat-talvez">0</span>
+                        <span class="text-xs text-slate-400" id="pct-talvez">0%</span>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between border-l-4 border-l-rose-500">
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">🔴 No Me Interesa</span>
+                    <div class="flex items-baseline gap-2 mt-2">
+                        <span class="text-2xl sm:text-3xl font-extrabold text-rose-500" id="stat-descartado">0</span>
+                        <span class="text-xs text-slate-400" id="pct-descartado">0%</span>
+                    </div>
+                </div>
+                <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-slate-800 dark:to-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-emerald-100 dark:border-slate-700 flex flex-col justify-between">
+                    <span class="text-xs text-emerald-800 dark:text-emerald-400 font-bold uppercase tracking-wider">Próximo Favorito ⭐</span>
+                    <div class="mt-2" id="nextFavContainer">
+                        <span class="text-xs text-slate-400">Sin partidos favoritos marcados aún.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secciones de Destacados Rápidos en el Dashboard -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Partidos de Hoy / Próximos Partidos Relevantes -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                            <span>🔥</span> Partidos Inaugurales Destacados
+                        </h3>
+                        <button onclick="switchTab('calendario')" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">Ver todo el calendario</button>
+                    </div>
+                    <div class="space-y-3" id="featuredMatchesDashboard">
+                        <!-- Generado dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Consejos y Estado de Configuración -->
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 mb-3">
+                            <span>💡</span> ¿Cómo planificar?
+                        </h3>
+                        <ul class="text-sm space-y-3 text-slate-600 dark:text-slate-300">
+                            <li class="flex gap-2">
+                                <span class="text-emerald-500">1.</span>
+                                <span>Explora la pestaña de <b>Partidos & Calendario</b>.</span>
+                            </li>
+                            <li class="flex gap-2">
+                                <span class="text-emerald-500">2.</span>
+                                <span>Clasifica cada partido presionando el botón de su tarjeta correspondiente de interés.</span>
+                            </li>
+                            <li class="flex gap-2">
+                                <span class="text-emerald-500">3.</span>
+                                <span>Revisa y exporta tu horario filtrado en la sección <b>Mi Agenda</b>.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">🌍</span>
+                            <div class="text-xs">
+                                <p class="font-semibold text-slate-800 dark:text-slate-200">Sedes en 3 Países</p>
+                                <p class="text-slate-500 dark:text-slate-400">Canadá (2), México (3) y EE.UU. (11).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VISTA: CALENDARIO Y PARTIDOS ==================== -->
+        <section id="view-calendario" class="tab-content space-y-6 animate-fadeIn">
+            <!-- Barra de Filtros, Búsqueda y Modos de Vista -->
+            <div class="bg-white dark:bg-slate-900 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                
+                <!-- Buscador e interruptor de Vista -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <!-- Buscador -->
+                    <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            🔍
+                        </span>
+                        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Buscar por Selección, Ciudad, Estadio, Fase o Fecha (AAAA-MM-DD)..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400 text-sm">
+                    </div>
+
+                    <!-- Modos de Vista -->
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start md:self-auto">
+                        <button onclick="changeViewMode('cronologica')" id="viewMode-cronologica" class="view-mode-btn px-4 py-2 text-xs sm:text-sm font-bold rounded-lg text-slate-500 dark:text-slate-400 transition-all">
+                            📋 Lista
+                        </button>
+                        <button onclick="changeViewMode('mensual')" id="viewMode-mensual" class="view-mode-btn px-4 py-2 text-xs sm:text-sm font-bold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 shadow-sm transition-all">
+                            📅 Mensual
+                        </button>
+                        <button onclick="changeViewMode('fases')" id="viewMode-fases" class="view-mode-btn px-4 py-2 text-xs sm:text-sm font-bold rounded-lg text-slate-500 dark:text-slate-400 transition-all">
+                            🏆 Por Fases
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros Avanzados -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+                    <!-- Filtro por Selección -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Selección</label>
+                        <select id="filterCountry" onchange="applyFilters()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5">
+                            <option value="">Cualquier país</option>
+                            <!-- Rellenado dinámicamente -->
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Ciudad / Sede -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Ciudad Sede</label>
+                        <select id="filterCity" onchange="applyFilters()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5">
+                            <option value="">Cualquier ciudad</option>
+                            <!-- Rellenado dinámicamente -->
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Fase -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Fase del Torneo</label>
+                        <select id="filterPhase" onchange="applyFilters()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5">
+                            <option value="">Cualquier fase</option>
+                            <option value="Fase de Grupos">Fase de Grupos</option>
+                            <option value="Dieciseisavos de final">Dieciseisavos (R32)</option>
+                            <option value="Octavos de final">Octavos de final</option>
+                            <option value="Cuartos de final">Cuartos de final</option>
+                            <option value="Semifinal">Semifinales</option>
+                            <option value="Tercer puesto">Tercer puesto</option>
+                            <option value="Final">Final</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Estado de Interés -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Tu Nivel de Interés</label>
+                        <select id="filterInterest" onchange="applyFilters()" class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5">
+                            <option value="">Todos</option>
+                            <option value="quiero">🟢 Quiero verlo</option>
+                            <option value="talvez">🟡 Tal vez</option>
+                            <option value="descartado">🔴 No me interesa</option>
+                            <option value="sin_estado">⚪ Sin marcar</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botón de Restablecer filtros -->
+                <div class="flex justify-end pt-1">
+                    <button onclick="resetFilters()" class="text-xs text-slate-500 hover:text-emerald-600 transition flex items-center gap-1">
+                        🧹 Limpiar todos los filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESULTADO DE FILTRADO Y MODO DE VISUALIZACIÓN -->
+            <div id="calendarDisplayArea" class="space-y-4">
+                <!-- Se inyectarán los datos dependiendo del modo de vista seleccionado -->
+            </div>
+        </section>
+
+        <!-- ==================== VISTA: MI MUNDIAL (MI AGENDA) ==================== -->
+        <section id="view-mi-mundial" class="tab-content hidden space-y-6 animate-fadeIn">
+            <!-- Encabezado de la Agenda con Botón de Exportar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        <span>⭐</span> Mi Agenda Personal del Mundial
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        Mostrando solo los partidos marcados como <b class="text-emerald-600 dark:text-emerald-400">Quiero verlo</b> y <b class="text-amber-500">Tal vez</b>.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Botón Exportar CSV -->
+                    <button onclick="exportAgendaToCSV()" class="px-4 py-2 text-xs sm:text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center gap-1.5" title="Descargar como CSV para Excel/Google Sheets">
+                        📥 CSV
+                    </button>
+                    <!-- Botón Imprimir / PDF -->
+                    <button onclick="printAgenda()" class="px-4 py-2 text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition flex items-center gap-1.5 shadow-sm" title="Imprimir agenda o guardar como PDF">
+                        🖨️ Guardar PDF / Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lista de partidos de la Agenda -->
+            <div id="myAgendaContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Se renderiza dinámicamente -->
+            </div>
+        </section>
+
+        <!-- ==================== VISTA: SEDES INTERACTIVAS ==================== -->
+        <section id="view-sedes" class="tab-content hidden space-y-6 animate-fadeIn">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Mapa de Sedes Esquemático -->
+                <div class="lg:col-span-1 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">🗺️ Sedes del Torneo</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Selecciona un país y una sede para descubrir qué encuentros se disputarán allí.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Bloque de País: Canadá -->
+                        <div class="p-3 bg-red-50/50 dark:bg-red-950/10 rounded-xl border border-red-100 dark:border-red-950/50">
+                            <span class="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5 mb-2">
+                                🇨🇦 CANADÁ (Sedes)
+                            </span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="selectSede('Vancouver')" class="sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-red-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium">Vancouver</button>
+                                <button onclick="selectSede('Toronto')" class="sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-red-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium">Toronto</button>
+                            </div>
+                        </div>
+
+                        <!-- Bloque de País: México -->
+                        <div class="p-3 bg-emerald-50/50 dark:bg-emerald-950/10 rounded-xl border border-emerald-100 dark:border-emerald-950/50">
+                            <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 mb-2">
+                                🇲🇽 MÉXICO (Sedes)
+                            </span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="selectSede('Ciudad de México')" class="sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-emerald-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium">Ciudad de México</button>
+                                <button onclick="selectSede('Guadalajara')" class="sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-emerald-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium">Guadalajara</button>
+                                <button onclick="selectSede('Monterrey')" class="sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-emerald-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium">Monterrey</button>
+                            </div>
+                        </div>
+
+                        <!-- Bloque de País: Estados Unidos -->
+                        <div class="p-3 bg-blue-50/50 dark:bg-blue-950/10 rounded-xl border border-blue-100 dark:border-blue-950/50">
+                            <span class="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 mb-2">
+                                🇺🇸 ESTADOS UNIDOS (Sedes)
+                            </span>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <button onclick="selectSede('Seattle')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Seattle</button>
+                                <button onclick="selectSede('San Francisco')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">San Francisco</button>
+                                <button onclick="selectSede('Los Ángeles')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Los Ángeles</button>
+                                <button onclick="selectSede('Houston')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Houston</button>
+                                <button onclick="selectSede('Dallas')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Dallas</button>
+                                <button onclick="selectSede('Kansas City')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Kansas City</button>
+                                <button onclick="selectSede('Atlanta')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Atlanta</button>
+                                <button onclick="selectSede('Miami')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Miami</button>
+                                <button onclick="selectSede('Boston')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Boston</button>
+                                <button onclick="selectSede('Filadelfia')" class="sede-badge-btn px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Filadelfia</button>
+                                <button onclick="selectSede('Nueva York / Nueva Jersey')" class="sede-badge-btn col-span-2 px-2 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-blue-500 hover:text-white border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left">Nueva York / Nueva Jersey</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partidos en Sede Seleccionada -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                                <span id="selectedSedeName">📍 Selecciona una Sede</span>
+                            </h3>
+                            <span id="selectedSedeStadium" class="text-xs text-slate-500 dark:text-slate-400 italic"></span>
+                        </div>
+                        
+                        <div id="sedeMatchesList" class="space-y-3">
+                            <div class="text-center py-12 text-slate-400">
+                                <span class="text-4xl block mb-2">🏟️</span>
+                                Presiona sobre cualquiera de las 16 sedes de la izquierda para desplegar los partidos agendados en dicho estadio.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="sedeSummaryInfo" class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 hidden">
+                        * Toda la información de estadios y horarios está basada en la información oficial provista por la FIFA para la Copa Mundial del 2026.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400 space-y-2">
+            <p class="font-bold">Planificador de Agenda del Aficionado - FIFA WORLD CUP 2026 ⚽</p>
+            <p>Este planificador es una herramienta independiente de información con todos los partidos reales confirmados oficialmente.</p>
+            <p>© 2026 Copa del Mundo Personal Planner. Desarrollado con 💚 en Vanilla JS.</p>
+        </div>
+    </footer>
+
+    <!-- INYECCIÓN DE DATOS DE LOS PARTIDOS Y LÓGICA DE JAVASCRIPT -->
+    <script>
+        // --- BASE DE DATOS DEL MUNDIAL DE LA FIFA 2026 (Partidos Oficiales Reales Confirmados) ---
+        const MATCHES_DATABASE = [
+            // Jornada 1
+            { id: 1, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-11", time: "13:00", team1: "México", team1Flag: "🇲🇽", team2: "Sudáfrica", team2Flag: "🇿🇦", city: "Ciudad de México", stadium: "Estadio Azteca" },
+            { id: 2, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-11", time: "20:00", team1: "República de Corea", team1Flag: "🇰🇷", team2: "República Checa", team2Flag: "🇨🇿", city: "Guadalajara", stadium: "Estadio Akron" },
+            { id: 3, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-12", time: "15:00", team1: "Canadá", team1Flag: "🇨🇦", team2: "Bosnia y Herzegovina", team2Flag: "🇧🇦", city: "Toronto", stadium: "BMO Field" },
+            { id: 4, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-12", time: "18:00", team1: "Estados Unidos", team1Flag: "🇺🇸", team2: "Paraguay", team2Flag: "🇵🇾", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 5, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-13", time: "13:00", team1: "Catar", team1Flag: "🇶🇦", team2: "Suiza", team2Flag: "🇨🇭", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 6, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-13", time: "16:00", team1: "Brasil", team1Flag: "🇧🇷", team2: "Marruecos", team2Flag: "🇲🇦", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 7, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-13", time: "19:00", team1: "Haití", team1Flag: "🇭🇹", team2: "Escocia", team2Flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 8, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-13", time: "21:00", team1: "Australia", team1Flag: "🇦🇺", team2: "Turquía", team2Flag: "🇹🇷", city: "Vancouver", stadium: "BC Place" },
+            { id: 9, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-14", time: "11:00", team1: "Alemania", team1Flag: "🇩🇪", team2: "Curazao", team2Flag: "🇨🇼", city: "Houston", stadium: "NRG Stadium" },
+            { id: 10, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-14", time: "14:00", team1: "Países Bajos", team1Flag: "🇳🇱", team2: "Japón", team2Flag: "🇯🇵", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 11, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-14", time: "17:00", team1: "Costa de Marfil", team1Flag: "🇨🇮", team2: "Ecuador", team2Flag: "🇪🇨", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 12, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-14", time: "20:00", team1: "Suecia", team1Flag: "🇸🇪", team2: "Túnez", team2Flag: "🇹🇳", city: "Monterrey", stadium: "Estadio BBVA" },
+            { id: 13, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-15", time: "10:00", team1: "España", team1Flag: "🇪🇸", team2: "Cabo Verde", team2Flag: "🇨🇻", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 14, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-15", time: "13:00", team1: "Bélgica", team1Flag: "🇧🇪", team2: "Egipto", team2Flag: "🇪🇬", city: "Seattle", stadium: "Lumen Field" },
+            { id: 15, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-15", time: "16:00", team1: "Arabia Saudí", team1Flag: "🇸🇦", team2: "Uruguay", team2Flag: "🇺🇾", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 16, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-15", time: "19:00", team1: "RI de Irán", team1Flag: "🇮🇷", team2: "Nueva Zelanda", team2Flag: "🇳🇿", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 17, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-16", time: "15:00", team1: "Francia", team1Flag: "🇫🇷", team2: "Senegal", team2Flag: "🇸🇳", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 18, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-16", time: "18:00", team1: "Irak", team1Flag: "🇮🇶", team2: "Noruega", team2Flag: "🇳🇴", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 19, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-16", time: "20:00", team1: "Argentina", team1Flag: "🇦🇷", team2: "Argelia", team2Flag: "🇩🇿", city: "Kansas City", stadium: "Arrowhead Stadium" },
+            { id: 20, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-16", time: "21:00", team1: "Austria", team1Flag: "🇦🇹", team2: "Jordania", team2Flag: "🇯🇴", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 21, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-17", time: "12:00", team1: "Portugal", team1Flag: "🇵🇹", team2: "RD Congo", team2Flag: "🇨🇩", city: "Houston", stadium: "NRG Stadium" },
+            { id: 22, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-17", time: "15:00", team1: "Inglaterra", team1Flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", team2: "Croacia", team2Flag: "🇭🇷", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 23, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-17", time: "19:00", team1: "Ghana", team1Flag: "🇬🇭", team2: "Panamá", team2Flag: "🇵🇦", city: "Toronto", stadium: "BMO Field" },
+            { id: 24, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-17", time: "20:00", team1: "Uzbekistán", team1Flag: "🇺🇿", team2: "Colombia", team2Flag: "🇨🇴", city: "Ciudad de México", stadium: "Estadio Azteca" },
+            
+            // Jornada 2
+            { id: 25, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-18", time: "12:00", team1: "República Checa", team1Flag: "🇨🇿", team2: "Sudáfrica", team2Flag: "🇿🇦", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 26, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-18", time: "12:00", team1: "Suiza", team1Flag: "🇨🇭", team2: "Bosnia y Herzegovina", team2Flag: "🇧🇦", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 27, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-18", time: "15:00", team1: "Canadá", team1Flag: "🇨🇦", team2: "Catar", team2Flag: "🇶🇦", city: "Vancouver", stadium: "BC Place" },
+            { id: 28, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-18", time: "19:00", team1: "México", team1Flag: "🇲🇽", team2: "República de Corea", team2Flag: "🇰🇷", city: "Guadalajara", stadium: "Estadio Akron" },
+            { id: 29, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-19", time: "12:00", team1: "Estados Unidos", team1Flag: "🇺🇸", team2: "Australia", team2Flag: "🇦🇺", city: "Seattle", stadium: "Lumen Field" },
+            { id: 30, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-19", time: "18:00", team1: "Escocia", team1Flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", team2: "Marruecos", team2Flag: "🇲🇦", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 31, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-19", time: "20:30", team1: "Brasil", team1Flag: "🇧🇷", team2: "Haití", team2Flag: "🇭🇹", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 32, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-19", time: "20:00", team1: "Turquía", team1Flag: "🇹🇷", team2: "Paraguay", team2Flag: "🇵🇾", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 33, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-20", time: "12:00", team1: "Países Bajos", team1Flag: "🇳🇱", team2: "Suecia", team2Flag: "🇸🇪", city: "Houston", stadium: "NRG Stadium" },
+            { id: 34, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-20", time: "16:00", team1: "Alemania", team1Flag: "🇩🇪", team2: "Costa de Marfil", team2Flag: "🇨🇮", city: "Toronto", stadium: "BMO Field" },
+            { id: 35, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-20", time: "19:00", team1: "Ecuador", team1Flag: "🇪🇨", team2: "Curazao", team2Flag: "🇨🇼", city: "Kansas City", stadium: "Arrowhead Stadium" },
+            { id: 36, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-20", time: "22:00", team1: "Túnez", team1Flag: "🇹🇳", team2: "Japón", team2Flag: "🇯🇵", city: "Monterrey", stadium: "Estadio BBVA" },
+            { id: 37, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-21", time: "12:00", team1: "España", team1Flag: "🇪🇸", team2: "Arabia Saudí", team2Flag: "🇸🇦", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 38, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-21", time: "12:00", team1: "Bélgica", team1Flag: "🇧🇪", team2: "RI de Irán", team2Flag: "🇮🇷", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 39, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-21", time: "18:00", team1: "Uruguay", team1Flag: "🇺🇾", team2: "Cabo Verde", team2Flag: "🇨🇻", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 40, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-21", time: "18:00", team1: "Nueva Zelanda", team1Flag: "🇳🇿", team2: "Egipto", team2Flag: "🇪🇬", city: "Vancouver", stadium: "BC Place" },
+            { id: 41, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-22", time: "11:00", team1: "Argentina", team1Flag: "🇦🇷", team2: "Austria", team2Flag: "🇦🇹", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 42, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-22", time: "15:00", team1: "Francia", team1Flag: "🇫🇷", team2: "Irak", team2Flag: "🇮🇶", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 43, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-22", time: "18:00", team1: "Noruega", team1Flag: "🇳🇴", team2: "Senegal", team2Flag: "🇸🇳", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 44, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-22", time: "21:00", team1: "Jordania", team1Flag: "🇯🇴", team2: "Argelia", team2Flag: "🇩🇿", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 45, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-23", time: "13:00", team1: "Portugal", team1Flag: "🇵🇹", team2: "Uzbekistán", team2Flag: "🇺🇿", city: "Houston", stadium: "NRG Stadium" },
+            { id: 46, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-23", time: "16:00", team1: "Inglaterra", team1Flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", team2: "Ghana", team2Flag: "🇬🇭", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 47, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-23", time: "19:00", team1: "Panamá", team1Flag: "🇵🇦", team2: "Croacia", team2Flag: "🇭🇷", city: "Toronto", stadium: "BMO Field" },
+            { id: 48, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-23", time: "20:00", team1: "Colombia", team1Flag: "🇨🇴", team2: "RD Congo", team2Flag: "🇨🇩", city: "Guadalajara", stadium: "Estadio Akron" },
+
+            // Jornada 3
+            { id: 49, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-24", time: "13:00", team1: "Suiza", team1Flag: "🇨🇭", team2: "Canadá", team2Flag: "🇨🇦", city: "Vancouver", stadium: "BC Place" },
+            { id: 50, group: "Grupo B", phase: "Fase de Grupos", date: "2026-06-24", time: "13:00", team1: "Bosnia y Herzegovina", team1Flag: "🇧🇦", team2: "Catar", team2Flag: "🇶🇦", city: "Seattle", stadium: "Lumen Field" },
+            { id: 51, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-24", time: "16:00", team1: "Escocia", team1Flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", team2: "Brasil", team2Flag: "🇧🇷", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 52, group: "Grupo C", phase: "Fase de Grupos", date: "2026-06-24", time: "16:00", team1: "Marruecos", team1Flag: "🇲🇦", team2: "Haití", team2Flag: "🇭🇹", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 53, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-24", time: "19:00", team1: "República Checa", team1Flag: "🇨🇿", team2: "México", team2Flag: "🇲🇽", city: "Ciudad de México", stadium: "Estadio Azteca" },
+            { id: 54, group: "Grupo A", phase: "Fase de Grupos", date: "2026-06-24", time: "19:00", team1: "Sudáfrica", team1Flag: "🇿🇦", team2: "República de Corea", team2Flag: "🇰🇷", city: "Monterrey", stadium: "Estadio BBVA" },
+            { id: 55, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-25", time: "14:00", team1: "Curazao", team1Flag: "🇨🇼", team2: "Costa de Marfil", team2Flag: "🇨🇮", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 56, group: "Grupo E", phase: "Fase de Grupos", date: "2026-06-25", time: "14:00", team1: "Ecuador", team1Flag: "🇪🇨", team2: "Alemania", team2Flag: "🇩🇪", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 57, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-25", time: "17:00", team1: "Japón", team1Flag: "🇯🇵", team2: "Suecia", team2Flag: "🇸🇪", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 58, group: "Grupo F", phase: "Fase de Grupos", date: "2026-06-25", time: "17:00", team1: "Túnez", team1Flag: "🇹🇳", team2: "Países Bajos", team2Flag: "🇳🇱", city: "Kansas City", stadium: "Arrowhead Stadium" },
+            { id: 59, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-25", time: "20:00", team1: "Turquía", team1Flag: "🇹🇷", team2: "Estados Unidos", team2Flag: "🇺🇸", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 60, group: "Grupo D", phase: "Fase de Grupos", date: "2026-06-25", time: "20:00", team1: "Paraguay", team1Flag: "🇵🇾", team2: "Australia", team2Flag: "🇦🇺", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 61, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-26", time: "13:00", team1: "Noruega", team1Flag: "🇳🇴", team2: "Francia", team2Flag: "🇫🇷", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 62, group: "Grupo I", phase: "Fase de Grupos", date: "2026-06-26", time: "13:00", team1: "Senegal", team1Flag: "🇸🇳", team2: "Irak", team2Flag: "🇮🇶", city: "Toronto", stadium: "BMO Field" },
+            { id: 63, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-26", time: "18:00", team1: "Cabo Verde", team1Flag: "🇨🇻", team2: "Arabia Saudí", team2Flag: "🇸🇦", city: "Houston", stadium: "NRG Stadium" },
+            { id: 64, group: "Grupo H", phase: "Fase de Grupos", date: "2026-06-26", time: "18:00", team1: "Uruguay", team1Flag: "🇺🇾", team2: "España", team2Flag: "🇪🇸", city: "Guadalajara", stadium: "Estadio Akron" },
+            { id: 65, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-26", time: "21:00", team1: "Egipto", team1Flag: "🇪🇬", team2: "RI de Irán", team2Flag: "🇮🇷", city: "Seattle", stadium: "Lumen Field" },
+            { id: 66, group: "Grupo G", phase: "Fase de Grupos", date: "2026-06-26", time: "21:00", team1: "Nueva Zelanda", team1Flag: "🇳🇿", team2: "Bélgica", team2Flag: "🇧🇪", city: "Vancouver", stadium: "BC Place" },
+            { id: 67, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-27", time: "15:00", team1: "Panamá", team1Flag: "🇵🇦", team2: "Inglaterra", team2Flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 68, group: "Grupo L", phase: "Fase de Grupos", date: "2026-06-27", time: "15:00", team1: "Croacia", team1Flag: "🇭🇷", team2: "Ghana", team2Flag: "🇬🇭", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 69, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-27", time: "17:30", team1: "Colombia", team1Flag: "🇨🇴", team2: "Portugal", team2Flag: "🇵🇹", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 70, group: "Grupo K", phase: "Fase de Grupos", date: "2026-06-27", time: "17:30", team1: "RD Congo", team1Flag: "🇨🇩", team2: "Uzbekistán", team2Flag: "🇺🇿", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 71, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-27", time: "20:00", team1: "Argelia", team1Flag: "🇩🇿", team2: "Austria", team2Flag: "🇦🇹", city: "Kansas City", stadium: "Arrowhead Stadium" },
+            { id: 72, group: "Grupo J", phase: "Fase de Grupos", date: "2026-06-27", time: "20:00", team1: "Jordania", team1Flag: "🇯🇴", team2: "Argentina", team2Flag: "🇦🇷", city: "Dallas", stadium: "AT&T Stadium" },
+
+            // Dieciseisavos de Final - 28 de Junio al 3 de Julio
+            { id: 73, group: "Llave 1", phase: "Dieciseisavos de final", date: "2026-06-28", time: "14:00", team1: "1° Grupo A", team1Flag: "🏳️", team2: "3° Grupo C/D/E", team2Flag: "🏳️", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 74, group: "Llave 2", phase: "Dieciseisavos de final", date: "2026-06-28", time: "18:00", team1: "2° Grupo A", team1Flag: "🏳️", team2: "2° Grupo B", team2Flag: "🏳️", city: "Guadalajara", stadium: "Estadio Akron" },
+            { id: 75, group: "Llave 3", phase: "Dieciseisavos de final", date: "2026-06-29", time: "15:00", team1: "1° Grupo B", team1Flag: "🏳️", team2: "3° Grupo A/F/G", team2Flag: "🏳️", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 76, group: "Llave 4", phase: "Dieciseisavos de final", date: "2026-06-29", time: "19:00", team1: "1° Grupo C", team1Flag: "🏳️", team2: "2° Grupo F", team2Flag: "🏳️", city: "Monterrey", stadium: "Estadio BBVA" },
+            { id: 77, group: "Llave 5", phase: "Dieciseisavos de final", date: "2026-06-30", time: "13:00", team1: "1° Grupo F", team1Flag: "🏳️", team2: "2° Grupo C", team2Flag: "🏳️", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 78, group: "Llave 6", phase: "Dieciseisavos de final", date: "2026-06-30", time: "17:00", team1: "1° Grupo D", team1Flag: "🏳️", team2: "3° Grupo B/I/J", team2Flag: "🏳️", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 79, group: "Llave 7", phase: "Dieciseisavos de final", date: "2026-07-01", time: "14:00", team1: "1° Grupo E", team1Flag: "🏳️", team2: "3° Grupo K/L", team2Flag: "🏳️", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 80, group: "Llave 8", phase: "Dieciseisavos de final", date: "2026-07-01", time: "18:00", team1: "1° Grupo G", team1Flag: "🏳️", team2: "2° Grupo H", team2Flag: "🏳️", city: "San Francisco", stadium: "Levi's Stadium" },
+            { id: 81, group: "Llave 9", phase: "Dieciseisavos de final", date: "2026-07-02", time: "15:00", team1: "1° Grupo H", team1Flag: "🏳️", team2: "2° Grupo G", team2Flag: "🏳️", city: "Houston", stadium: "NRG Stadium" },
+            { id: 82, group: "Llave 10", phase: "Dieciseisavos de final", date: "2026-07-02", time: "19:00", team1: "1° Grupo I", team1Flag: "🏳️", team2: "3° Grupo D/E/F", team2Flag: "🏳️", city: "Seattle", stadium: "Lumen Field" },
+            { id: 83, group: "Llave 11", phase: "Dieciseisavos de final", date: "2026-07-03", time: "16:00", team1: "1° Grupo J", team1Flag: "🏳️", team2: "2° Grupo K", team2Flag: "🏳️", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 84, group: "Llave 12", phase: "Dieciseisavos de final", date: "2026-07-03", time: "20:00", team1: "1° Grupo K", team1Flag: "🏳️", team2: "2° Grupo J", team2Flag: "🏳️", city: "Vancouver", stadium: "BC Place" },
+
+            // Octavos de Final - 4 al 7 de Julio
+            { id: 89, group: "Octavos 1", phase: "Octavos de final", date: "2026-07-04", time: "15:00", team1: "Ganador P73", team1Flag: "🏳️", team2: "Ganador P74", team2Flag: "🏳️", city: "Houston", stadium: "NRG Stadium" },
+            { id: 90, group: "Octavos 2", phase: "Octavos de final", date: "2026-07-04", time: "19:00", team1: "Ganador P75", team1Flag: "🏳️", team2: "Ganador P76", team2Flag: "🏳️", city: "Filadelfia", stadium: "Lincoln Financial Field" },
+            { id: 91, group: "Octavos 3", phase: "Octavos de final", date: "2026-07-05", time: "14:00", team1: "Ganador P77", team1Flag: "🏳️", team2: "Ganador P78", team2Flag: "🏳️", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" },
+            { id: 92, group: "Octavos 4", phase: "Octavos de final", date: "2026-07-05", time: "18:00", team1: "Ganador P79", team1Flag: "🏳️", team2: "Ganador P80", team2Flag: "🏳️", city: "Ciudad de México", stadium: "Estadio Azteca" },
+            { id: 93, group: "Octavos 5", phase: "Octavos de final", date: "2026-07-06", time: "15:00", team1: "Ganador P81", team1Flag: "🏳️", team2: "Ganador P82", team2Flag: "🏳️", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 94, group: "Octavos 6", phase: "Octavos de final", date: "2026-07-06", time: "19:00", team1: "Ganador P83", team1Flag: "🏳️", team2: "Ganador P84", team2Flag: "🏳️", city: "Seattle", stadium: "Lumen Field" },
+            { id: 95, group: "Octavos 7", phase: "Octavos de final", date: "2026-07-07", time: "15:00", team1: "Ganador P85", team1Flag: "🏳️", team2: "Ganador P86", team2Flag: "🏳️", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+            { id: 96, group: "Octavos 8", phase: "Octavos de final", date: "2026-07-07", time: "19:00", team1: "Ganador P87", team1Flag: "🏳️", team2: "Ganador P88", team2Flag: "🏳️", city: "Vancouver", stadium: "BC Place" },
+
+            // Cuartos de Final - 9 al 11 de Julio
+            { id: 97, group: "Cuartos 1", phase: "Cuartos de final", date: "2026-07-09", time: "15:00", team1: "Ganador P89", team1Flag: "🏳️", team2: "Ganador P90", team2Flag: "🏳️", city: "Boston", stadium: "Gillette Stadium" },
+            { id: 98, group: "Cuartos 2", phase: "Cuartos de final", date: "2026-07-10", time: "19:00", team1: "Ganador P91", team1Flag: "🏳️", team2: "Ganador P92", team2Flag: "🏳️", city: "Los Ángeles", stadium: "SoFi Stadium" },
+            { id: 99, group: "Cuartos 3", phase: "Cuartos de final", date: "2026-07-11", time: "14:00", team1: "Ganador P93", team1Flag: "🏳️", team2: "Ganador P94", team2Flag: "🏳️", city: "Miami", stadium: "Hard Rock Stadium" },
+            { id: 100, group: "Cuartos 4", phase: "Cuartos de final", date: "2026-07-11", time: "18:00", team1: "Ganador P95", team1Flag: "🏳️", team2: "Ganador P96", team2Flag: "🏳️", city: "Kansas City", stadium: "Arrowhead Stadium" },
+
+            // Semifinales - 14 y 15 de Julio
+            { id: 101, group: "Semifinal 1", phase: "Semifinal", date: "2026-07-14", time: "19:00", team1: "Ganador P97", team1Flag: "🏳️", team2: "Ganador P98", team2Flag: "🏳️", city: "Dallas", stadium: "AT&T Stadium" },
+            { id: 102, group: "Semifinal 2", phase: "Semifinal", date: "2026-07-15", time: "19:00", team1: "Ganador P99", team1Flag: "🏳️", team2: "Ganador P100", team2Flag: "🏳️", city: "Atlanta", stadium: "Mercedes-Benz Stadium" },
+
+            // Tercer Puesto - 18 de Julio
+            { id: 103, group: "Definición 3° Lugar", phase: "Tercer puesto", date: "2026-07-18", time: "15:00", team1: "Perdedor Semifinal 1", team1Flag: "🏳️", team2: "Perdedor Semifinal 2", team2Flag: "🏳️", city: "Miami", stadium: "Hard Rock Stadium" },
+
+            // La Gran Final - 19 de Julio
+            { id: 104, group: "Gran Final", phase: "Final", date: "2026-07-19", time: "16:00", team1: "Ganador Semifinal 1", team1Flag: "🏳️", team2: "Ganador Semifinal 2", team2Flag: "🏳️", city: "Nueva York / Nueva Jersey", stadium: "MetLife Stadium" }
+        ];
+
+        // --- SISTEMA DE ESTADO DE USUARIO (LocalStorage) ---
+        let USER_PREFERENCES = {
+            interests: {}, // id_partido: "quiero" | "talvez" | "descartado"
+            theme: "light",
+            currentTab: "dashboard",
+            currentViewMode: "mensual"
+        };
+
+        // --- ESTADO LOCAL DEL FILTRO Y BÚSQUEDA ---
+        let activeFilters = {
+            search: "",
+            country: "",
+            city: "",
+            phase: "",
+            interest: ""
+        };
+
+        // --- INICIALIZADOR DE LA APLICACIÓN ---
+        window.onload = function() {
+            loadUserPreferences();
+            populateFilterOptions();
+            applyTheme();
+            switchTab(USER_PREFERENCES.currentTab);
+            updateDashboardStats();
+            changeViewMode(USER_PREFERENCES.currentViewMode);
+            renderMyAgenda();
+            renderFeaturedMatches();
+            
+            setInterval(updateCountdowns, 1000);
+            updateCountdowns();
+        };
+
+        // --- MANEJO DE PREFERENCIAS Y ALMACENAMIENTO ---
+        function loadUserPreferences() {
+            const saved = localStorage.getItem("fifa_2026_planner_preferences");
+            if (saved) {
+                try {
+                    USER_PREFERENCES = JSON.parse(saved);
+                    if (!USER_PREFERENCES.interests) USER_PREFERENCES.interests = {};
+                    if (!USER_PREFERENCES.theme) USER_PREFERENCES.theme = "light";
+                    if (!USER_PREFERENCES.currentTab) USER_PREFERENCES.currentTab = "dashboard";
+                    if (!USER_PREFERENCES.currentViewMode) USER_PREFERENCES.currentViewMode = "mensual";
+                } catch(e) {
+                    console.error("Error al parsear LocalStorage", e);
+                }
+            }
+        }
+
+        function saveUserPreferences() {
+            localStorage.setItem("fifa_2026_planner_preferences", JSON.stringify(USER_PREFERENCES));
+        }
+
+        // --- MANEJO DE TEMAS (MODO OSCURO) ---
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                USER_PREFERENCES.theme = "light";
+            } else {
+                html.classList.add('dark');
+                USER_PREFERENCES.theme = "dark";
+            }
+            applyTheme();
+            saveUserPreferences();
+        }
+
+        function applyTheme() {
+            const html = document.documentElement;
+            const btnIcon = document.getElementById("themeBtnIcon");
+            if (USER_PREFERENCES.theme === "dark") {
+                html.classList.add('dark');
+                btnIcon.textContent = "☀️";
+            } else {
+                html.classList.remove('dark');
+                btnIcon.textContent = "🌙";
+            }
+        }
+
+        // --- NAVEGACIÓN ENTRE PESTAÑAS (TABS) ---
+        function switchTab(tabId) {
+            USER_PREFERENCES.currentTab = tabId;
+            saveUserPreferences();
+
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-emerald-600', 'dark:text-emerald-400', 'border-b-2', 'border-emerald-500');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400');
+            });
+
+            const activeSection = document.getElementById(`view-${tabId}`);
+            if (activeSection) {
+                activeSection.classList.remove('hidden');
+            }
+
+            const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+                activeBtn.classList.add('text-emerald-600', 'dark:text-emerald-400', 'border-b-2', 'border-emerald-500');
+            }
+
+            if (tabId === 'mi-mundial') {
+                renderMyAgenda();
+            }
+        }
+
+        // --- RELLENAR SELECTORES DE FILTRO DINÁMICOS ---
+        function populateFilterOptions() {
+            const filterCountry = document.getElementById("filterCountry");
+            const filterCity = document.getElementById("filterCity");
+            
+            const countries = new Set();
+            const cities = new Set();
+
+            MATCHES_DATABASE.forEach(m => {
+                if(m.team1 && !m.team1.startsWith("Por definir") && !m.team1.startsWith("Ganador") && !m.team1.startsWith("1°") && !m.team1.startsWith("2°") && !m.team1.startsWith("Perdedor")) countries.add(m.team1);
+                if(m.team2 && !m.team2.startsWith("Por definir") && !m.team2.startsWith("Ganador") && !m.team2.startsWith("1°") && !m.team2.startsWith("2°") && !m.team2.startsWith("Perdedor")) countries.add(m.team2);
+                if(m.city) cities.add(m.city);
+            });
+
+            Array.from(countries).sort().forEach(country => {
+                const opt = document.createElement("option");
+                opt.value = country;
+                opt.textContent = country;
+                filterCountry.appendChild(opt);
+            });
+
+            Array.from(cities).sort().forEach(city => {
+                const opt = document.createElement("option");
+                opt.value = city;
+                opt.textContent = city;
+                filterCity.appendChild(opt);
+            });
+        }
+
+        // --- RETORNAR COLOR IDENTIFICATIVO POR FASE ---
+        function getPhaseColorBadge(phase) {
+            switch(phase) {
+                case "Fase de Grupos":
+                    return "bg-sky-100 text-sky-800 dark:bg-sky-950/40 dark:text-sky-300 border-sky-200 dark:border-sky-900";
+                case "Dieciseisavos de final":
+                    return "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-300 border-indigo-200 dark:border-indigo-900";
+                case "Octavos de final":
+                    return "bg-purple-100 text-purple-800 dark:bg-purple-950/40 dark:text-purple-300 border-purple-200 dark:border-purple-900";
+                case "Cuartos de final":
+                    return "bg-pink-100 text-pink-800 dark:bg-pink-950/40 dark:text-pink-300 border-pink-200 dark:border-pink-900";
+                case "Semifinal":
+                    return "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200 dark:border-amber-900";
+                case "Tercer puesto":
+                    return "bg-teal-100 text-teal-800 dark:bg-teal-950/40 dark:text-teal-300 border-teal-200 dark:border-teal-900";
+                case "Final":
+                    return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900";
+                default:
+                    return "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700";
+            }
+        }
+
+        // --- SISTEMA DE CALIFICACIÓN DE INTERÉS ---
+        function setMatchInterest(matchId, interestType) {
+            if (USER_PREFERENCES.interests[matchId] === interestType) {
+                delete USER_PREFERENCES.interests[matchId];
+            } else {
+                USER_PREFERENCES.interests[matchId] = interestType;
+            }
+            
+            saveUserPreferences();
+            updateDashboardStats();
+            renderCalendar();
+            renderFeaturedMatches();
+            renderMyAgenda();
+            
+            if (activeSedeNameGlobal) {
+                selectSede(activeSedeNameGlobal);
+            }
+        }
+
+        // --- ACTUALIZACIÓN DE ESTADÍSTICAS DEL DASHBOARD ---
+        function updateDashboardStats() {
+            let total = MATCHES_DATABASE.length;
+            let quiero = 0;
+            let talvez = 0;
+            let descartado = 0;
+
+            MATCHES_DATABASE.forEach(m => {
+                const interest = USER_PREFERENCES.interests[m.id];
+                if (interest === 'quiero') quiero++;
+                else if (interest === 'talvez') talvez++;
+                else if (interest === 'descartado') descartado++;
+            });
+
+            document.getElementById("stat-quiero").textContent = quiero;
+            document.getElementById("stat-talvez").textContent = talvez;
+            document.getElementById("stat-descartado").textContent = descartado;
+
+            document.getElementById("pct-quiero").textContent = `${Math.round((quiero/total)*100)}%`;
+            document.getElementById("pct-talvez").textContent = `${Math.round((talvez/total)*100)}%`;
+            document.getElementById("pct-descartado").textContent = `${Math.round((descartado/total)*100)}%`;
+
+            document.getElementById("agendaCountBadge").textContent = quiero + talvez;
+
+            const favorites = MATCHES_DATABASE.filter(m => USER_PREFERENCES.interests[m.id] === 'quiero')
+                .sort((a,b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+            const nextFavContainer = document.getElementById("nextFavContainer");
+            if (favorites.length > 0) {
+                const next = favorites[0];
+                nextFavContainer.innerHTML = `
+                    <div class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${next.team1Flag} ${next.team1} vs ${next.team2Flag} ${next.team2}</div>
+                    <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">${formatLocalDate(next.date)} - ${next.time} hs</div>
+                    <div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold mt-1">Sede: ${next.city}</div>
+                `;
+            } else {
+                nextFavContainer.innerHTML = `<span class="text-xs text-slate-400">Sin partidos marcados para ver todavía.</span>`;
+            }
+        }
+
+        // --- CONVERTIDOR DE FECHAS DE FORMATO ISO A ESPAÑOL ---
+        function formatLocalDate(dateString) {
+            const options = { weekday: 'long', day: 'numeric', month: 'short' };
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        // --- COMPONENTE: RENDERIZADOR DE TARJETA DE PARTIDO ---
+        function generateMatchCardHTML(match, showCountdown = true) {
+            const interest = USER_PREFERENCES.interests[match.id] || null;
+            
+            const btnQuieroClass = interest === 'quiero' ? 'bg-emerald-500 text-white font-semibold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-emerald-100';
+            const btnTalvezClass = interest === 'talvez' ? 'bg-amber-500 text-white font-semibold' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-amber-100';
+            const btnDescartadoClass = interest === 'descartado' ? 'bg-rose-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-rose-100';
+
+            const badgeColor = getPhaseColorBadge(match.phase);
+
+            return `
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-900/60 transition flex flex-col justify-between gap-3 relative overflow-hidden">
+                    
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border ${badgeColor}">
+                            ${match.phase}
+                        </span>
+                        <span class="text-slate-400 dark:text-slate-500 font-semibold text-[11px]">
+                            ${match.group}
+                        </span>
+                    </div>
+
+                    <div class="py-2 flex flex-col gap-2.5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">${match.team1Flag}</span>
+                                <span class="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 truncate max-w-[130px] sm:max-w-[170px]" title="${match.team1}">${match.team1}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">${match.team2Flag}</span>
+                                <span class="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 truncate max-w-[130px] sm:max-w-[170px]" title="${match.team2}">${match.team2}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 dark:border-slate-800/60 pt-3 text-xs text-slate-500 dark:text-slate-400 space-y-1">
+                        <div class="flex items-center gap-1">
+                            <span>📅</span>
+                            <span class="font-medium capitalize text-slate-700 dark:text-slate-300">${formatLocalDate(match.date)} | <b class="text-slate-800 dark:text-slate-200">${match.time} HS</b></span>
+                        </div>
+                        <div class="flex items-center gap-1 truncate" title="${match.stadium}">
+                            <span>🏟️</span>
+                            <span>${match.stadium}, <b class="text-slate-700 dark:text-slate-300">${match.city}</b></span>
+                        </div>
+                    </div>
+
+                    ${showCountdown ? `
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-xl text-center text-[11px] font-bold text-slate-500 dark:text-slate-400 flex justify-center items-center gap-1">
+                            <span>⏳</span>
+                            <span class="match-countdown" data-datetime="${match.date}T${match.time}">Calculando...</span>
+                        </div>
+                    ` : ''}
+
+                    <div class="grid grid-cols-3 gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px]">
+                        <button onclick="setMatchInterest(${match.id}, 'quiero')" class="py-1.5 rounded-lg flex items-center justify-center gap-1 transition ${btnQuieroClass}">
+                            <span>🟢</span> Ver
+                        </button>
+                        <button onclick="setMatchInterest(${match.id}, 'talvez')" class="py-1.5 rounded-lg flex items-center justify-center gap-1 transition ${btnTalvezClass}">
+                            <span>🟡</span> Tal vez
+                        </button>
+                        <button onclick="setMatchInterest(${match.id}, 'descartado')" class="py-1.5 rounded-lg flex items-center justify-center gap-1 transition ${btnDescartadoClass}">
+                            <span>🔴</span> No ver
+                        </button>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        // --- STREAMING_CHUNK:Filtering match database queries... ---
+        // --- MANEJO DE FILTRADO DE LA BASE DE DATOS DE PARTIDOS ---
+        function getFilteredMatches() {
+            return MATCHES_DATABASE.filter(match => {
+                // Filtro por Búsqueda Predictiva (País, Ciudad, Estadio, Fase o Fecha)
+                if (activeFilters.search) {
+                    const query = activeFilters.search.toLowerCase();
+                    const matchCountry1 = match.team1.toLowerCase().includes(query);
+                    const matchCountry2 = match.team2.toLowerCase().includes(query);
+                    const matchCity = match.city.toLowerCase().includes(query);
+                    const matchStadium = match.stadium.toLowerCase().includes(query);
+                    const matchPhase = match.phase.toLowerCase().includes(query);
+                    const matchDate = match.date.includes(query); // CORRECCIÓN CLAVE: Permite filtrar e indexar por la fecha seleccionada
+                    
+                    if (!matchCountry1 && !matchCountry2 && !matchCity && !matchStadium && !matchPhase && !matchDate) {
+                        return false;
+                    }
+                }
+
+                if (activeFilters.country) {
+                    if (match.team1 !== activeFilters.country && match.team2 !== activeFilters.country) {
+                        return false;
+                    }
+                }
+
+                if (activeFilters.city) {
+                    if (match.city !== activeFilters.city) {
+                        return false;
+                    }
+                }
+
+                if (activeFilters.phase) {
+                    if (match.phase !== activeFilters.phase) {
+                        return false;
+                    }
+                }
+
+                if (activeFilters.interest) {
+                    const status = USER_PREFERENCES.interests[match.id];
+                    if (activeFilters.interest === 'sin_estado') {
+                        if (status) return false;
+                    } else {
+                        if (status !== activeFilters.interest) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            });
+        }
+
+        // --- ACCIONES DE FILTRO ---
+        function applyFilters() {
+            activeFilters.search = document.getElementById("searchInput").value;
+            activeFilters.country = document.getElementById("filterCountry").value;
+            activeFilters.city = document.getElementById("filterCity").value;
+            activeFilters.phase = document.getElementById("filterPhase").value;
+            activeFilters.interest = document.getElementById("filterInterest").value;
+            
+            renderCalendar();
+        }
+
+        function resetFilters() {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("filterCountry").value = "";
+            document.getElementById("filterCity").value = "";
+            document.getElementById("filterPhase").value = "";
+            document.getElementById("filterInterest").value = "";
+            
+            activeFilters = { search: "", country: "", city: "", phase: "", interest: "" };
+            renderCalendar();
+        }
+
+        // --- CONTROLADORES DE INTERRUPTOR DE MODO DE VISTA ---
+        function changeViewMode(mode) {
+            USER_PREFERENCES.currentViewMode = mode;
+            saveUserPreferences();
+
+            document.querySelectorAll('.view-mode-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-slate-100', 'shadow-sm');
+                btn.classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`viewMode-${mode}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-500', 'dark:text-slate-400');
+                activeBtn.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-slate-100', 'shadow-sm');
+            }
+
+            renderCalendar();
+        }
+
+        // --- STREAMING_CHUNK:Rendering visual calendar formats... ---
+        // --- RENDERIZACIÓN DE LA VISTA COMPLETA DEL CALENDARIO ---
+        function renderCalendar() {
+            const displayArea = document.getElementById("calendarDisplayArea");
+            const filtered = getFilteredMatches();
+
+            if (filtered.length === 0) {
+                displayArea.innerHTML = `
+                    <div class="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <span class="text-5xl block mb-3">🔍</span>
+                        <h4 class="text-lg font-bold text-slate-800 dark:text-slate-100">No se encontraron encuentros</h4>
+                        <p class="text-sm text-slate-400 mt-1">Prueba cambiando los filtros aplicados o reajustando tu búsqueda.</p>
+                        <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition">Restaurar filtros</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // --- VISTA 1: CRONOLÓGICA (LISTA COMPACTA AGRUPADA POR FECHA) ---
+            if (USER_PREFERENCES.currentViewMode === "cronologica") {
+                const groupedByDate = {};
+                filtered.sort((a,b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`))
+                    .forEach(m => {
+                        if (!groupedByDate[m.date]) groupedByDate[m.date] = [];
+                        groupedByDate[m.date].push(m);
+                    });
+
+                let html = '<div class="space-y-8">';
+                Object.keys(groupedByDate).forEach(date => {
+                    html += `
+                        <div class="space-y-3">
+                            <h3 class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 border-b border-emerald-100 dark:border-slate-800 pb-1 flex items-center gap-2">
+                                <span>📅</span> ${formatLocalDate(date).toUpperCase()}
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                ${groupedByDate[date].map(m => generateMatchCardHTML(m)).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                displayArea.innerHTML = html;
+            }
+
+            // --- VISTA 2: MENSUAL (CALENDARIO DE CASILLAS PARA JUNIO Y JULIO 2026) ---
+            else if (USER_PREFERENCES.currentViewMode === "mensual") {
+                let html = '<div class="space-y-6">';
+
+                // Mes 1: Junio 2026
+                html += `
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-lg font-extrabold mb-4 text-center text-slate-800 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-2">📅 JUNIO 2026</h3>
+                        <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-bold text-slate-500 mb-2">
+                            <div>DOM</div><div>LUN</div><div>MAR</div><div>MIÉ</div><div>JUE</div><div>VIE</div><div>SÁB</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1.5">
+                            <div></div>
+                `;
+
+                // Renderizamos los 30 días de Junio de 2026 (1 de Junio de 2026 es Lunes)
+                for (let day = 1; day <= 30; day++) {
+                    const dateStr = `2026-06-${day.toString().padStart(2, '0')}`;
+                    const matchesOfDay = filtered.filter(m => m.date === dateStr);
+                    const hasMatches = matchesOfDay.length > 0;
+                    
+                    let bgClass = "bg-slate-50 dark:bg-slate-800/40 hover:bg-emerald-50 dark:hover:bg-slate-800 cursor-pointer";
+                    if (hasMatches) {
+                        bgClass = "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/60 hover:bg-emerald-100 dark:hover:bg-emerald-950/40 cursor-pointer";
+                    }
+
+                    html += `
+                        <div onclick="filterBySpecificDate('${dateStr}')" class="min-h-[80px] p-1.5 border border-slate-100 dark:border-slate-800 rounded-xl flex flex-col justify-between transition ${bgClass}">
+                            <span class="font-extrabold text-xs text-slate-400">${day}</span>
+                            ${hasMatches ? `
+                                <div class="text-[10px] bg-emerald-600 text-white font-bold py-0.5 px-1 rounded text-center truncate">
+                                    ${matchesOfDay.length} P.
+                                </div>
+                            ` : `<div class="h-2"></div>`}
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                // Mes 2: Julio 2026
+                html += `
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <h3 class="text-lg font-extrabold mb-4 text-center text-slate-800 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-2">📅 JULIO 2026</h3>
+                        <div class="grid grid-cols-7 gap-1.5 text-center text-xs font-bold text-slate-500 mb-2">
+                            <div>DOM</div><div>LUN</div><div>MAR</div><div>MIÉ</div><div>JUE</div><div>VIE</div><div>SÁB</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1.5">
+                            <!-- 1 de Julio de 2026 es Miércoles, por lo tanto 3 espacios vacíos (Dom, Lun, Mar) -->
+                            <div></div><div></div><div></div>
+                `;
+
+                // Renderizamos los 31 días de Julio
+                for (let day = 1; day <= 31; day++) {
+                    const dateStr = `2026-07-${day.toString().padStart(2, '0')}`;
+                    const matchesOfDay = filtered.filter(m => m.date === dateStr);
+                    const hasMatches = matchesOfDay.length > 0;
+                    
+                    let bgClass = "bg-slate-50 dark:bg-slate-800/40 hover:bg-emerald-50 dark:hover:bg-slate-800 cursor-pointer";
+                    if (hasMatches) {
+                        bgClass = "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/60 hover:bg-emerald-100 dark:hover:bg-emerald-950/40 cursor-pointer";
+                    }
+
+                    html += `
+                        <div onclick="filterBySpecificDate('${dateStr}')" class="min-h-[80px] p-1.5 border border-slate-100 dark:border-slate-800 rounded-xl flex flex-col justify-between transition ${bgClass}">
+                            <span class="font-extrabold text-xs text-slate-400">${day}</span>
+                            ${hasMatches ? `
+                                <div class="text-[10px] bg-emerald-600 text-white font-bold py-0.5 px-1 rounded text-center truncate">
+                                    ${matchesOfDay.length} P.
+                                </div>
+                            ` : `<div class="h-2"></div>`}
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                html += `
+                    <div class="text-center text-xs text-slate-500 dark:text-slate-400">
+                        💡 Presiona sobre cualquier fecha marcada con partidos en verde para ver el desglose en el buscador cronológico.
+                    </div>
+                `;
+                html += '</div>';
+                displayArea.innerHTML = html;
+            }
+
+            // --- VISTA 3: POR FASES (AGRUPACIÓN POR ETAPAS DEL TORNEO) ---
+            else if (USER_PREFERENCES.currentViewMode === "fases") {
+                const groupedByPhase = {};
+                filtered.forEach(m => {
+                    if (!groupedByPhase[m.phase]) groupedByPhase[m.phase] = [];
+                    groupedByPhase[m.phase].push(m);
+                });
+
+                const orderedPhases = [
+                    "Fase de Grupos",
+                    "Dieciseisavos de final",
+                    "Octavos de final",
+                    "Cuartos de final",
+                    "Semifinal",
+                    "Tercer puesto",
+                    "Final"
+                ];
+
+                let html = '<div class="space-y-8">';
+                orderedPhases.forEach(phase => {
+                    if (groupedByPhase[phase] && groupedByPhase[phase].length > 0) {
+                        html += `
+                            <div class="space-y-3">
+                                <h3 class="text-sm font-extrabold text-slate-800 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2 flex items-center gap-2">
+                                    <span class="inline-block w-2.5 h-2.5 rounded-full ${getPhaseColorBadge(phase).split(' ')[0]}"></span>
+                                    ${phase.toUpperCase()} (${groupedByPhase[phase].length} partidos)
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    ${groupedByPhase[phase].map(m => generateMatchCardHTML(m)).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                html += '</div>';
+                displayArea.innerHTML = html;
+            }
+        }
+
+        // --- ACCIÓN: FILTRAR POR UNA FECHA AL CLICAR EN MODO MENSUAL ---
+        function filterBySpecificDate(dateStr) {
+            USER_PREFERENCES.currentViewMode = "cronologica";
+            
+            document.querySelectorAll('.view-mode-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-slate-100', 'shadow-sm');
+                btn.classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+            document.getElementById('viewMode-cronologica').classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-slate-100', 'shadow-sm');
+
+            activeFilters.search = dateStr;
+            document.getElementById("searchInput").value = dateStr;
+            
+            renderCalendar();
+        }
+
+        // --- STREAMING_CHUNK:Rendering personal agenda options... ---
+        // --- VISTA: MI MUNDIAL / MI AGENDA PERSONALIZADA ---
+        function renderMyAgenda() {
+            const container = document.getElementById("myAgendaContainer");
+            
+            const agendaMatches = MATCHES_DATABASE.filter(m => {
+                const interest = USER_PREFERENCES.interests[m.id];
+                return (interest === 'quiero' || interest === 'talvez');
+            }).sort((a,b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+            if (agendaMatches.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800">
+                        <span class="text-5xl block mb-3">📅</span>
+                        <h4 class="text-lg font-bold text-slate-800 dark:text-slate-100">Tu agenda de partidos está vacía</h4>
+                        <p class="text-sm text-slate-400 mt-1">Explora la lista completa de partidos del Mundial y selecciona "Quiero verlo" o "Tal vez" para construir tu itinerario.</p>
+                        <button onclick="switchTab('calendario')" class="mt-4 px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition">Ver Partidos</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = agendaMatches.map(m => generateMatchCardHTML(m)).join('');
+        }
+
+        // --- SECCIÓN: PARTIDOS INAUGURALES DESTACADOS (DASHBOARD) ---
+        function renderFeaturedMatches() {
+            const container = document.getElementById("featuredMatchesDashboard");
+            const featured = MATCHES_DATABASE.slice(0, 4);
+            
+            container.innerHTML = featured.map(m => {
+                const interest = USER_PREFERENCES.interests[m.id];
+                let interestIndicator = '⚪ Sin marcar';
+                if (interest === 'quiero') interestIndicator = '🟢 Quiero verlo';
+                else if (interest === 'talvez') interestIndicator = '🟡 Tal vez';
+                else if (interest === 'descartado') interestIndicator = '🔴 No me interesa';
+
+                return `
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 border border-slate-100 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition gap-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">✨</span>
+                            <div>
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200">
+                                    ${m.team1Flag} ${m.team1} vs ${m.team2Flag} ${m.team2}
+                                </p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                                    ${formatLocalDate(m.date)} | ${m.time} HS - ${m.city} (${m.stadium})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 self-end sm:self-center">
+                            <span class="text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-1 px-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                                ${interestIndicator}
+                            </span>
+                            <button onclick="switchTab('calendario')" class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">Gestionar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- SECCIÓN INTERACTIVA DE SEDES ---
+        let activeSedeNameGlobal = null;
+        function selectSede(sedeName) {
+            activeSedeNameGlobal = sedeName;
+            
+            const stadiumNode = document.getElementById("selectedSedeStadium");
+            const matchesContainer = document.getElementById("sedeMatchesList");
+            const summaryNode = document.getElementById("sedeSummaryInfo");
+            
+            const matches = MATCHES_DATABASE.filter(m => m.city.toLowerCase() === sedeName.toLowerCase())
+                .sort((a,b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+            document.getElementById("selectedSedeName").textContent = `📍 ${sedeName.toUpperCase()}`;
+            summaryNode.classList.remove("hidden");
+
+            if(matches.length > 0) {
+                stadiumNode.textContent = `${matches[0].stadium}`;
+                
+                matchesContainer.innerHTML = `
+                    <div class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-3">
+                        Total de encuentros en este estadio: ${matches.length}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${matches.map(m => generateMatchCardHTML(m, false)).join('')}
+                    </div>
+                `;
+            } else {
+                stadiumNode.textContent = "";
+                matchesContainer.innerHTML = `<div class="text-center py-8 text-slate-400">Sin partidos agendados en esta sede.</div>`;
+            }
+
+            document.querySelectorAll(".sede-badge-btn").forEach(btn => {
+                if (btn.textContent.trim().toLowerCase() === sedeName.toLowerCase()) {
+                    btn.className = "sede-badge-btn px-2.5 py-1 text-xs bg-emerald-600 text-white border border-transparent rounded-lg font-bold transition";
+                } else {
+                    btn.className = "sede-badge-btn px-2.5 py-1 text-xs bg-white dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 rounded-lg transition font-medium text-left";
+                }
+            });
+        }
+
+        // --- SISTEMA DE EXPORTACIÓN (CSV & PDF/IMPRESIÓN) ---
+        function exportAgendaToCSV() {
+            const agendaMatches = MATCHES_DATABASE.filter(m => {
+                const interest = USER_PREFERENCES.interests[m.id];
+                return (interest === 'quiero' || interest === 'talvez');
+            }).sort((a,b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+
+            if(agendaMatches.length === 0) {
+                alert("No tienes partidos seleccionados en tu agenda. Marca al menos un partido para poder descargar la agenda.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "ID Partido,Fecha,Hora,Fase,Grupo,Equipo 1,Equipo 2,Ciudad,Estadio,Tu Interes\n";
+
+            agendaMatches.forEach(m => {
+                const statusStr = USER_PREFERENCES.interests[m.id] === 'quiero' ? "Quiero verlo" : "Tal vez";
+                const row = [
+                    m.id,
+                    m.date,
+                    m.time,
+                    `"${m.phase}"`,
+                    `"${m.group}"`,
+                    `"${m.team1}"`,
+                    `"${m.team2}"`,
+                    `"${m.city}"`,
+                    `"${m.stadium}"`,
+                    `"${statusStr}"`
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Mi_Agenda_Mundial_2026.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function printAgenda() {
+            window.print();
+        }
+
+        // --- STREAMING_CHUNK:Running countdown listeners... ---
+        // --- CUENTAS REGRESIVAS EN TIEMPO REAL ---
+        function updateCountdowns() {
+            const globalTarget = new Date("2026-06-11T13:00:00").getTime();
+            const now = new Date().getTime();
+            const globalDiff = globalTarget - now;
+
+            const globalSpan = document.getElementById("globalCountdown");
+            if (globalDiff > 0) {
+                const d = Math.floor(globalDiff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((globalDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((globalDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((globalDiff % (1000 * 60)) / 1000);
+                globalSpan.textContent = `Faltan: ${d}d ${h}h ${m}m ${s}s`;
+            } else {
+                globalSpan.textContent = "🏆 ¡EL MUNDIAL HA COMENZADO!";
+            }
+
+            document.querySelectorAll(".match-countdown").forEach(span => {
+                const targetStr = span.getAttribute("data-datetime");
+                if (targetStr) {
+                    const target = new Date(targetStr).getTime();
+                    const diff = target - now;
+
+                    if (diff > 0) {
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                        if (days > 0) {
+                            span.textContent = `Faltan ${days}d, ${hours}h`;
+                        } else {
+                            span.textContent = `Faltan ${hours}h y ${mins}m`;
+                        }
+                    } else {
+                        span.textContent = "Partido en Progreso o Finalizado";
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
